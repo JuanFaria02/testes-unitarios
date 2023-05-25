@@ -1,6 +1,7 @@
 package br.ce.juanfaria.servicos;
 
 import static br.ce.juanfaria.utils.DataUtils.adicionarDias;
+import static br.ce.juanfaria.utils.DataUtils.isMesmaData;
 
 import java.util.Date;
 import java.util.IllegalFormatCodePointException;
@@ -34,9 +35,13 @@ public class LocacaoService {
 		locacao.setUsuario(usuario);
 		locacao.setDataLocacao(new Date());
 		Double valorLocacao = 0d;
-		for (Filme f:
-			 filmes) {
-			valorLocacao+=f.getPrecoLocacao();
+
+
+		for (int i = 0; i < filmes.size(); i++) {
+			double valorPagar = buscarValor(filmes, i);
+
+			valorLocacao += valorPagar;
+
 		}
 		locacao.setValor(valorLocacao);
 		//Entrega no dia seguinte
@@ -48,6 +53,24 @@ public class LocacaoService {
 		//TODO adicionar método para salvar
 
 		return locacao;
+	}
+
+	private double buscarValor(List<Filme> filmes, int i) {
+		if (filmes.size() == 3 && i == 2){
+			return filmes.get(i).getPrecoLocacao() - (0.25 * filmes.get(i).getPrecoLocacao());
+		}
+		else if (filmes.size() == 4 && i == 3){
+			return filmes.get(i).getPrecoLocacao() - (0.50 * filmes.get(i).getPrecoLocacao());
+		}
+		else if (filmes.size() == 5 && i == 4){
+			return filmes.get(i).getPrecoLocacao() - (0.75 * filmes.get(i).getPrecoLocacao());
+		}
+		else if (filmes.size() == 6 && i == 5){
+			return filmes.get(i).getPrecoLocacao() - (1.0 * filmes.get(i).getPrecoLocacao());
+		}
+		else {
+			return filmes.get(i).getPrecoLocacao();
+		}
 	}
 
 }

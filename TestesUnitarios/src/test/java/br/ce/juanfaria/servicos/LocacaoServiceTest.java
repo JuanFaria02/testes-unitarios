@@ -3,18 +3,13 @@ package br.ce.juanfaria.servicos;
 import br.ce.juanfaria.entidades.Filme;
 import br.ce.juanfaria.entidades.Locacao;
 import br.ce.juanfaria.entidades.Usuario;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Rule;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.junit.rules.ErrorCollector;
 
-import java.lang.ref.PhantomReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -42,25 +37,21 @@ public class LocacaoServiceTest {
     }
 
     @Test
-    public void test() {
+    public void testAluguelFilme() throws Exception {
         //cenario
         Usuario usuario = new Usuario("Usuario 1");
         Filme filme = new Filme("Filme 1", 2, 5.0);
         Filme filme2 = new Filme("Filme 1", 2, 5.0);
-        Filme filme3 = new Filme("Filme 1", 2, 5.0);
 
-        filmes.addAll(Arrays.asList(filme, filme2, filme3));
+
+        filmes.addAll(Arrays.asList(filme, filme2));
 
         //ação
-        Locacao locacao = null;
-        try {
-            locacao = locacaoService.alugarFilme(usuario, filmes);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        Locacao locacao = locacaoService.alugarFilme(usuario, filmes);
+
 
         //avaliação usando assert that (verifique que)
-        assertThat(locacao.getValor(), is(equalTo(15.0)));
+        assertThat(locacao.getValor(), is(equalTo(10.0)));
         assertThat(locacao.getValor(), not(equalTo(6.0)));
 
         assertThat(isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
@@ -103,6 +94,68 @@ public class LocacaoServiceTest {
         });
 
         Assert.assertEquals("Usuario vazio", exception.getMessage());
+    }
 
+    @Test
+    public void testPagar75pctNoTerceiroFilme() throws Exception {
+        //Cenário
+        Usuario usuario = new Usuario("Usuario 1");
+        Filme filme = new Filme("Filme 1", 2, 5.0);
+        Filme filme2 = new Filme("Filme 1", 2, 5.0);
+        Filme filme3 = new Filme("Filme 1", 2, 5.0);
+
+        filmes.addAll(Arrays.asList(filme, filme2, filme3));
+        //Ação
+        Locacao locacao = locacaoService.alugarFilme(usuario, filmes);
+        //Verificação
+        assertThat(locacao.getValor(), is(equalTo(13.75)));
+    }
+    @Test
+    public void testPagar50pctNoQuartoFilme() throws Exception {
+        //Cenário
+        Usuario usuario = new Usuario("Usuario 1");
+        Filme filme = new Filme("Filme 1", 2, 5.0);
+        Filme filme2 = new Filme("Filme 1", 2, 5.0);
+        Filme filme3 = new Filme("Filme 1", 2, 5.0);
+        Filme filme4 = new Filme("Filme 1", 2, 20.0);
+        filmes.addAll(Arrays.asList(filme, filme2, filme3, filme4));
+        //Ação
+        Locacao locacao = locacaoService.alugarFilme(usuario, filmes);
+        //Verificação
+        assertThat(locacao.getValor(), is(equalTo(25.0)));
+    }
+
+    @Test
+    public void testPagar75pctNoQuintoFilme() throws Exception {
+        //Cenário
+        Usuario usuario = new Usuario("Usuario 1");
+        Filme filme = new Filme("Filme 1", 2, 5.0);
+        Filme filme2 = new Filme("Filme 1", 2, 5.0);
+        Filme filme3 = new Filme("Filme 1", 2, 5.0);
+        Filme filme4 = new Filme("Filme 1", 2, 20.0);
+        Filme filme5 = new Filme("Filme 1", 2, 20.0);
+
+        filmes.addAll(Arrays.asList(filme, filme2, filme3, filme4, filme5));
+        //Ação
+        Locacao locacao = locacaoService.alugarFilme(usuario, filmes);
+        //Verificação
+        assertThat(locacao.getValor(), is(equalTo(40.0)));
+    }
+
+    @Test
+    public void testPagar100pctNoQuintoFilme() throws Exception {
+        //Cenário
+        Usuario usuario = new Usuario("Usuario 1");
+        Filme filme = new Filme("Filme 1", 2, 5.0);
+        Filme filme2 = new Filme("Filme 1", 2, 5.0);
+        Filme filme3 = new Filme("Filme 1", 2, 5.0);
+        Filme filme4 = new Filme("Filme 1", 2, 20.0);
+        Filme filme5 = new Filme("Filme 1", 2, 20.0);
+        Filme filme6 = new Filme("Filme 1", 2, 20.0);
+        filmes.addAll(Arrays.asList(filme, filme2, filme3, filme4, filme5, filme6));
+        //Ação
+        Locacao locacao = locacaoService.alugarFilme(usuario, filmes);
+        //Verificação
+        assertThat(locacao.getValor(), is(equalTo(55.0)));
     }
 }
