@@ -3,6 +3,7 @@ package br.ce.juanfaria.servicos;
 import static br.ce.juanfaria.utils.DataUtils.adicionarDias;
 import static br.ce.juanfaria.utils.DataUtils.isMesmaData;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
@@ -11,6 +12,9 @@ import java.util.stream.Collectors;
 import br.ce.juanfaria.entidades.Filme;
 import br.ce.juanfaria.entidades.Locacao;
 import br.ce.juanfaria.entidades.Usuario;
+import br.ce.juanfaria.utils.DataUtils;
+
+import javax.xml.crypto.Data;
 
 public class LocacaoService {
 	
@@ -45,8 +49,12 @@ public class LocacaoService {
 		}
 		locacao.setValor(valorLocacao);
 		//Entrega no dia seguinte
+
 		Date dataEntrega = new Date();
 		dataEntrega = adicionarDias(dataEntrega, 1);
+		if (DataUtils.verificarDiaSemana(dataEntrega, Calendar.SUNDAY)){
+			DataUtils.adicionarDias(dataEntrega, 1);
+		}
 		locacao.setDataRetorno(dataEntrega);
 
 		//Salvando a locacao...

@@ -3,17 +3,18 @@ package br.ce.juanfaria.servicos;
 import br.ce.juanfaria.entidades.Filme;
 import br.ce.juanfaria.entidades.Locacao;
 import br.ce.juanfaria.entidades.Usuario;
+import br.ce.juanfaria.utils.DataUtils;
 import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.rules.ErrorCollector;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static br.ce.juanfaria.utils.DataUtils.isMesmaData;
 import static br.ce.juanfaria.utils.DataUtils.obterDataComDiferencaDias;
@@ -38,6 +39,7 @@ public class LocacaoServiceTest {
 
     @Test
     public void testAluguelFilme() throws Exception {
+        Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
         //cenario
         Usuario usuario = new Usuario("Usuario 1");
         Filme filme = new Filme("Filme 1", 2, 5.0);
@@ -157,5 +159,23 @@ public class LocacaoServiceTest {
         Locacao locacao = locacaoService.alugarFilme(usuario, filmes);
         //Verificação
         assertThat(locacao.getValor(), is(equalTo(55.0)));
+    }
+
+    @Test
+    //@Disabled Teste não será executado
+    public void naoDeveDevolverFilmeDomingo() throws Exception {
+        //Só executa o teste se a data for sabado
+        Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
+        //Cenario
+        Usuario usuario = new Usuario("Usuario 1");
+        Filme filme = new Filme("Filme 1", 2, 5.0);
+        filmes.addAll(Arrays.asList(filme));
+
+        //Ação
+        Locacao locacao = locacaoService.alugarFilme(usuario, filmes);
+
+        //Verificação
+        boolean segunda = DataUtils.verificarDiaSemana(locacao.getDataRetorno(), Calendar.MONDAY);
+        Assert.assertTrue(segunda);
     }
 }
