@@ -99,7 +99,7 @@ public class LocacaoServiceTest {
     }
 
     @Test
-    public void testPagar75pctNoTerceiroFilme() throws Exception {
+    public void testPagar25pctNoTerceiroFilme() throws Exception {
         //Cenário
         Usuario usuario = new Usuario("Usuario 1");
         Filme filme = new Filme("Filme 1", 2, 5.0);
