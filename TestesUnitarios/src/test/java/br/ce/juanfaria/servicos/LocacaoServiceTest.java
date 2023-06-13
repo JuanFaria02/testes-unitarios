@@ -17,8 +17,7 @@ import org.junit.rules.ErrorCollector;
 
 import java.util.*;
 
-import static br.ce.juanfaria.matchers.MatchersProprios.caiEm;
-import static br.ce.juanfaria.matchers.MatchersProprios.caiNumaSegunda;
+import static br.ce.juanfaria.matchers.MatchersProprios.*;
 import static br.ce.juanfaria.utils.DataUtils.isMesmaData;
 import static br.ce.juanfaria.utils.DataUtils.obterDataComDiferencaDias;
 import static org.hamcrest.CoreMatchers.*;
@@ -53,14 +52,15 @@ public class LocacaoServiceTest {
 
         //ação
         Locacao locacao = locacaoService.alugarFilme(usuario, filmes);
-
-
         //avaliação usando assert that (verifique que)
         assertThat(locacao.getValor(), is(equalTo(10.0)));
         assertThat(locacao.getValor(), not(equalTo(6.0)));
 
         assertThat(isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
         assertThat(isMesmaData(locacao.getDataRetorno(), obterDataComDiferencaDias(1)), is(true));
+        error.checkThat(locacao.getDataRetorno(), eHoje());
+
+        error.checkThat(locacao.getDataRetorno(), eHojeComDiferencaDias(1));
     }
     @Test
     public void testExceptionSemEstoque() throws Exception{

@@ -4,6 +4,7 @@ import br.ce.juanfaria.utils.DataUtils;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
+import javax.xml.crypto.Data;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -14,11 +15,13 @@ public class DiaSemanaMatcher extends TypeSafeMatcher<Date> {
         this.diaSemana = diaSemana;
     }
 
+
     //Realiza comparação
     @Override
     protected boolean matchesSafely(Date item) {
         return DataUtils.verificarDiaSemana(item, diaSemana);
     }
+
 
     @Override
     public void describeTo(Description description) {
