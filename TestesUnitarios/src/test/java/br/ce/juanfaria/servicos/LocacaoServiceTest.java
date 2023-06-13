@@ -3,6 +3,7 @@ package br.ce.juanfaria.servicos;
 import br.ce.juanfaria.entidades.Filme;
 import br.ce.juanfaria.entidades.Locacao;
 import br.ce.juanfaria.entidades.Usuario;
+import br.ce.juanfaria.matchers.DiaSemanaMatcher;
 import br.ce.juanfaria.utils.DataUtils;
 import org.junit.Assert;
 import org.junit.Assume;
@@ -16,6 +17,8 @@ import org.junit.rules.ErrorCollector;
 
 import java.util.*;
 
+import static br.ce.juanfaria.matchers.MatchersProprios.caiEm;
+import static br.ce.juanfaria.matchers.MatchersProprios.caiNumaSegunda;
 import static br.ce.juanfaria.utils.DataUtils.isMesmaData;
 import static br.ce.juanfaria.utils.DataUtils.obterDataComDiferencaDias;
 import static org.hamcrest.CoreMatchers.*;
@@ -177,5 +180,8 @@ public class LocacaoServiceTest {
         //Verificação
         boolean segunda = DataUtils.verificarDiaSemana(locacao.getDataRetorno(), Calendar.MONDAY);
         Assert.assertTrue(segunda);
+        //assertThat(locacao.getDataRetorno(), new DiaSemanaMatcher(Calendar.MONDAY));
+        assertThat(locacao.getDataRetorno(), caiEm(Calendar.MONDAY));
+        assertThat(locacao.getDataRetorno(), caiNumaSegunda());
     }
 }
