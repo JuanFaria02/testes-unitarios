@@ -3,15 +3,13 @@ package br.ce.juanfaria.servicos;
 import br.ce.juanfaria.entidades.Filme;
 import br.ce.juanfaria.entidades.Locacao;
 import br.ce.juanfaria.entidades.Usuario;
-import br.ce.juanfaria.matchers.DiaSemanaMatcher;
 import br.ce.juanfaria.utils.DataUtils;
 import org.junit.Assert;
 import org.junit.Assume;
-import org.junit.Ignore;
+
 import org.junit.Rule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.rules.ErrorCollector;
 
@@ -29,7 +27,7 @@ public class LocacaoServiceTest {
     private LocacaoService locacaoService;
     // Permite mudar o comportamento dos testes e criar regras
     @Rule
-    private ErrorCollector error = new ErrorCollector();
+    public ErrorCollector error = new ErrorCollector();
 
 
     //Executa antes de cada teste
