@@ -1,9 +1,12 @@
 package br.ce.juanfaria.servicos;
 
+import br.ce.juanfaria.builder.FilmeBuilder;
+import br.ce.juanfaria.builder.UsuarioBuilder;
 import br.ce.juanfaria.entidades.Filme;
 import br.ce.juanfaria.entidades.Locacao;
 import br.ce.juanfaria.entidades.Usuario;
 import br.ce.juanfaria.utils.DataUtils;
+import buildermaster.BuilderMaster;
 import org.junit.Assert;
 import org.junit.Assume;
 
@@ -41,9 +44,9 @@ public class LocacaoServiceTest {
     public void testAluguelFilme() throws Exception {
         Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
         //cenario
-        Usuario usuario = new Usuario("Usuario 1");
-        Filme filme = new Filme("Filme 1", 2, 5.0);
-        Filme filme2 = new Filme("Filme 1", 2, 5.0);
+        Usuario usuario = UsuarioBuilder.umUsuario().agora();
+        Filme filme = FilmeBuilder.umFilme().agora();
+        Filme filme2 = FilmeBuilder.umFilme().agora();
 
 
         filmes.addAll(Arrays.asList(filme, filme2));
@@ -63,8 +66,8 @@ public class LocacaoServiceTest {
     @Test
     public void testExceptionSemEstoque() throws Exception{
         //cenario
-        Usuario usuario = new Usuario("Usuario 1");
-        Filme filme = new Filme("Filme 1", 0, 5.0);
+        Usuario usuario = UsuarioBuilder.umUsuario().agora();
+        Filme filme = FilmeBuilder.umFilmeSemEstoque().agora();
         filmes.add(filme);
         //acao
         Throwable exception = Assertions.assertThrows(Exception.class, ()->{
@@ -77,7 +80,7 @@ public class LocacaoServiceTest {
     @Test
     public void testListaFilmesVazia(){
         //cenario
-        Usuario usuario = new Usuario("Usuario 1");
+        Usuario usuario = UsuarioBuilder.umUsuario().agora();
         //acao
         Throwable exception = Assertions.assertThrows(Exception.class, ()->{
             locacaoService.alugarFilme(usuario, filmes);
@@ -89,7 +92,7 @@ public class LocacaoServiceTest {
     @Test
     public void testUsuarioVazio(){
         //cenario
-        Filme filme = new Filme("Filme 1", 2, 5.0);
+        Filme filme = FilmeBuilder.umFilme().agora();
         filmes.add(filme);
         //acao
         Throwable exception = Assertions.assertThrows(Exception.class, ()->{
@@ -102,7 +105,7 @@ public class LocacaoServiceTest {
     @Test
     public void testPagar25pctNoTerceiroFilme() throws Exception {
         //Cenário
-        Usuario usuario = new Usuario("Usuario 1");
+        Usuario usuario = UsuarioBuilder.umUsuario().agora();
         Filme filme = new Filme("Filme 1", 2, 5.0);
         Filme filme2 = new Filme("Filme 1", 2, 5.0);
         Filme filme3 = new Filme("Filme 1", 2, 5.0);
@@ -116,7 +119,7 @@ public class LocacaoServiceTest {
     @Test
     public void testPagar50pctNoQuartoFilme() throws Exception {
         //Cenário
-        Usuario usuario = new Usuario("Usuario 1");
+        Usuario usuario = UsuarioBuilder.umUsuario().agora();
         Filme filme = new Filme("Filme 1", 2, 5.0);
         Filme filme2 = new Filme("Filme 1", 2, 5.0);
         Filme filme3 = new Filme("Filme 1", 2, 5.0);
@@ -131,7 +134,7 @@ public class LocacaoServiceTest {
     @Test
     public void testPagar75pctNoQuintoFilme() throws Exception {
         //Cenário
-        Usuario usuario = new Usuario("Usuario 1");
+        Usuario usuario = UsuarioBuilder.umUsuario().agora();
         Filme filme = new Filme("Filme 1", 2, 5.0);
         Filme filme2 = new Filme("Filme 1", 2, 5.0);
         Filme filme3 = new Filme("Filme 1", 2, 5.0);
@@ -148,7 +151,7 @@ public class LocacaoServiceTest {
     @Test
     public void testPagar100pctNoQuintoFilme() throws Exception {
         //Cenário
-        Usuario usuario = new Usuario("Usuario 1");
+        Usuario usuario = UsuarioBuilder.umUsuario().agora();
         Filme filme = new Filme("Filme 1", 2, 5.0);
         Filme filme2 = new Filme("Filme 1", 2, 5.0);
         Filme filme3 = new Filme("Filme 1", 2, 5.0);
@@ -168,8 +171,8 @@ public class LocacaoServiceTest {
         //Só executa o teste se a data for sabado
         Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
         //Cenario
-        Usuario usuario = new Usuario("Usuario 1");
-        Filme filme = new Filme("Filme 1", 2, 5.0);
+        Usuario usuario = UsuarioBuilder.umUsuario().agora();
+        Filme filme = FilmeBuilder.umFilme().agora();
         filmes.addAll(Arrays.asList(filme));
 
         //Ação
@@ -182,4 +185,10 @@ public class LocacaoServiceTest {
         assertThat(locacao.getDataRetorno(), caiEm(Calendar.MONDAY));
         assertThat(locacao.getDataRetorno(), caiNumaSegunda());
     }
+/*
+    public static void main(String[] args) {
+        new BuilderMaster().gerarCodigoClasse(Locacao.class);
+    }
+
+ */
 }
